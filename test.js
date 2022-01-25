@@ -20,7 +20,7 @@ async function test() {
     console.log('##########################');
     console.log('TAGS',tags);
 
-    //Test relations
+    //Test des relations
     //Test de la relation carte-tags
     const cardWithTags = await Card.findByPk(1,{
         include:['tags'] 
@@ -39,6 +39,17 @@ async function test() {
     for(const card of Tag1.cards){
         console.log('Carte avec le tag 1 :',card.title);
     }
+
+    //Test de la relation list-card
+    const cardsInList3 = await Card.findAll({
+        where:{
+            list_id : 3,
+        }
+    });
+    for(const cardElement of cardsInList3){
+        console.log('Carte dans la liste 3 :',cardElement.title);
+    }
+
 
 };
 
