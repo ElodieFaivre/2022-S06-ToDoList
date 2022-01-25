@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "dotenv": "^14.3.0",
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "sequelize": "^6.14.1"
+  },
+  "name": "s06-okanban-elodiefaivre",
+  "description": "## jour 2 : BDD",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node-dev index.js --no-notify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Zagreus/S06-oKanban-ElodieFaivre.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Zagreus/S06-oKanban-ElodieFaivre/issues"
+  },
+  "homepage": "https://github.com/O-clock-Zagreus/S06-oKanban-ElodieFaivre#readme"
+}
