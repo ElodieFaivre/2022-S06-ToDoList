@@ -7,6 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
+    "start": "node-dev index.js --no-notify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
