@@ -26,6 +26,7 @@ Tag.belongsToMany(Card,{
     through:'card_has_tag',
     foreignKey:'tag_id',
     otherKey:'card_id',
+    
 });
 
 module.exports = {List, Card, Tag};

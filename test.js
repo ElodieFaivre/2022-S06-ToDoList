@@ -21,6 +21,25 @@ async function test() {
     console.log('TAGS',tags);
 
     //Test des relations
+    // List-cards-tag
+    const listArray = await List.findAll({
+        include: [{
+            association :'cards',
+            include:['tags']
+        }]
+    });
+
+    console.log('voici les listes : ', listArray);
+    for (const list of listArray) {
+        for (const card of list.cards) {
+            console.log('jai une carte : ', card.title);
+            for (const tag of card.tags) {
+                console.log('un tag de la carte : ', tag.name);
+            }
+        }
+    }
+
+
     //Test de la relation carte-tags
     const cardWithTags = await Card.findByPk(1,{
         include:['tags'] 
@@ -41,14 +60,13 @@ async function test() {
     }
 
     //Test de la relation list-card
-    const cardsInList3 = await Card.findAll({
-        where:{
-            list_id : 3,
-        }
+    const card3List= await Card.findByPk(3,{
+        include:['list'],
+       
     });
-    for(const cardElement of cardsInList3){
-        console.log('Carte dans la liste 3 :',cardElement.title);
-    }
+   
+    console.log('Nom de la liste de la carte 3',card3List.list.name);
+
 
 
 };

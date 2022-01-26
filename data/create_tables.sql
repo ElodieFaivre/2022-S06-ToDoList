@@ -1,55 +1,73 @@
-
+-- On démarre une transaction afin de s'assurer de la cohérence globale de la BDD
 BEGIN;
-/*On efface les tables */
-DROP TABLE IF EXISTS "list", "tag", "card", "card_has_tag";
-COMMIT;
 
-BEGIN;
-/*Création des tables */
+-- On supprime les tables si elles existent
+DROP TABLE IF EXISTS "list", "card", "tag", "card_has_tag";
+
+-- la table list
 CREATE TABLE "list" (
-  "id" SERIAL PRIMARY KEY,
-  "name" TEXT,
-  "position" INTEGER NOT NULL
+    "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "name" TEXT NOT NULL DEFAULT '',
+    "position" INTEGER NOT NULL DEFAULT 0,
+    -- pour avoir la date et l'heure on utilise le type "timestamp", et pour Ãªtre le plus prÃ©cis possible on utilisera plutÃ´t le type "timestampz" qui contient en plus de la date et de l'heure le fuseau horaire dÃ©fini dans les locales du serveur
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "updated_at" TIMESTAMPTZ
 );
 
+-- la table card
 CREATE TABLE "card" (
-  "id" SERIAL PRIMARY KEY,
-  "title" TEXT,
-  "position" INTEGER NOT NULL,
-  "color" TEXT,
-  "list_id" INTEGER REFERENCES "list"("id")
+  "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "title" TEXT NOT NULL DEFAULT '',
+  "color" TEXT NOT NULL DEFAULT '#FFF' ,
+  -- si l'on veut pouvoir supprimer une liste qui contient des cartes, on est obligé de rajouter "ON DELETE CASCADE" qui aura pour conséquence de supprimer toutes les cartes qui font référence à la liste
+  "list_id" INTEGER NOT NULL REFERENCES list("id") ON DELETE CASCADE,
+  "position" INTEGER NOT NULL DEFAULT 0,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ
 );
 
+
+-- la table tag
 CREATE TABLE "tag" (
-  "id" SERIAL PRIMARY KEY,
-  "name" TEXT NOT NULL,
-  "color" TEXT
+  "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL DEFAULT '',
+  "color" TEXT NOT NULL DEFAULT '#FFF' ,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ
 );
+
+-- on oublie pas la table d'association
 CREATE TABLE "card_has_tag" (
-  "tag_id" INTEGER REFERENCES "tag"("id"),
-  "card_id" INTEGER REFERENCES "card"("id"),
-  PRIMARY KEY ("tag_id", "card_id")
+  -- si l'on veut pouvoir supprimer une carte ou un tag, on est obligé de rajouter "ON DELETE CASCADE" qui aura pour conséquence de supprimer les associations qui font référence a la carte ou le tag supprimé.
+  "card_id" INTEGER NOT NULL REFERENCES card("id") ON DELETE CASCADE,
+  "tag_id" INTEGER NOT NULL REFERENCES tag("id") ON DELETE CASCADE,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+ "updated_at" TIMESTAMPTZ,
+  -- ici pas forcément obligatoire  d'updated_at car une relation ne se met pas à jour, soit on l'ajoute soit on la supprime
+  UNIQUE ("card_id", "tag_id")
 );
+
 
 COMMIT;
+
 
 /*On remplit de données fictives*/
 BEGIN;
-INSERT INTO "list" ("id", "name", "position") VALUES 
-(1, 'En attente', 1),
-(2, 'En cours', 2),
-(3, 'A valider', 3),
-(4, 'Terminé', 4);
+INSERT INTO "list" ("name") VALUES 
+('En attente'),
+('En cours'),
+('A valider'),
+('Terminé');
 
-INSERT INTO "card" ("id", "title", "position", "color", "list_id") VALUES 
-(1, 'Models', 1,'#AAAAAA', 1),
-(2, 'Database', 2, '#DDDDDD', 2),
-(3, 'MLD', 3,'#AAAAAA', 3),
-(4, 'MCD', 4, '#DDDDDD', 4);
+INSERT INTO "card" ("title", "color", "list_id") VALUES 
+('Models', '#AAAAAA', 1),
+('Database', '#DDDDDD', 2),
+('MLD', '#AAAAAA', 3),
+('MCD', '#DDDDDD', 4);
 
-INSERT INTO "tag" ("id", "name", "color") VALUES 
-(1, 'def projet', '#AAAAAA'),
-(2, 'back', '#DDDDDD');
+INSERT INTO "tag" ("name", "color") VALUES 
+('def projet', '#AAAAAA'),
+('back', '#DDDDDD');
 
 INSERT INTO "card_has_tag" ("card_id", "tag_id") VALUES
 (1,2),
