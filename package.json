@@ -1,0 +1,28 @@
+{
+  "name": "okanban",
+  "version": "1.0.0",
+  "description": "## jour 2 : BDD",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Zagreus/S06-oKanban-NGambini.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Zagreus/S06-oKanban-NGambini/issues"
+  },
+  "homepage": "https://github.com/O-clock-Zagreus/S06-oKanban-NGambini#readme",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "sequelize": "^6.14.1"
+  }
+}
