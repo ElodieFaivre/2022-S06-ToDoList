@@ -2,58 +2,68 @@ const { Card } = require('../models');
 
 const cardController = {
     async getAllCards(req, res) {
-        const cardArray = await Card.findAll({
-            include: [
-                {  
-                    association: 'tags',
-                }
-            ]
-        });
-        res.json(cardArray);
-    },
-    async createCard(req, res) {
-        // pour créer une liste, j'ai juste besoin
-        // de lui donner un name.
-        // ce name, je vais le récupérer dans le body de la requete
         try {
-            if (req.body.content && req.body.color && req.body.list_id ) {
+            const cardArray = await Card.findAll({
+                include: [
+                    {
+                        association: 'tags',
+                    }
+                ]
+            });
+            res.status(200).json(cardArray);
+        }
+        catch (error) {
+            res.status(500).json(error.toString());
+        }
+    },
+
+    async createCard(req, res) {
+        try {
+            if (req.body.content && req.body.color && req.body.list_id) {
                 const newCard = new Card({
                     content: req.body.content,
                     color: req.body.color,
-                    list_id : req.body.list_id
+                    list_id: req.body.list_id
                 });
-               
+
                 await newCard.save();
 
                 res.status(201).json(newCard);
             }
-            else{
+            else {
                 res.status(404).json({ error: 'Nom, couleur et liste obligatoire' })
             }
         }
-        catch (err) {
-            res.status(404).json({ error: 'erreur' });
+        catch (error) {
+            res.status(500).json(error.toString());
         }
-
     },
+
     async getOneCard(req, res) {
         const id = parseInt(req.params.id);
         try {
             const oneCard = await Card.findByPk(id, {
                 include: ['tags']
             });
-            res.status(201).json(oneCard);
+            if (!oneCard) {
+                return res.status(404).json({ error: 'No card with id ' + req.params.id });
+            }
+            res.status(200).json(oneCard);
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such card ' });
+        catch (error) {
+            console.log(error);
+            // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
+            res.status(500).json(error.toString());
         }
     },
 
     async updateCard(req, res) {
         const id = parseInt(req.params.id);
-
         try {
-            const oneCart = await Card.findByPk(id);
+            const oneCard = await Card.findByPk(id);
+            if (!oneCard) {
+                return res.status(404).json({ error: 'No card with id ' + req.params.id });
+            }
             if (req.body.content) {
                 oneCard.content = req.body.content;
             }
@@ -61,30 +71,36 @@ const cardController = {
                 oneCard.position = parseInt(req.body.position);
             }
             if (req.body.color) {
-                oneCard.color =req.body.color;
+                oneCard.color = req.body.color;
             }
             await oneCard.save();
             res.status(200).json(oneCard);
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such card ' });
+        catch (error) {
+            console.log(error);
+            // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
+            res.status(500).json(error.toString());
         }
     },
 
     async deleteCard(req, res) {
         const id = parseInt(req.params.id);
         try {
-            const oneCard= await Card.findByPk(id);
-            await oneCard.destroy();
-            res.status(204).send('Supprimé avec succès');
+            const cardToDelete = await Card.findByPk(id);
+            if (!cardToDelete) {
+                res.status(404).json({ error: 'No card with id ' + req.params.id })
+            } else {
+                await cardToDelete.destroy();
+                res.status(204).send();
+                //equivalent à res.sendStatus(204)
+            }
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such card ' });
+        catch (error) {
+            console.log(error);
+            // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
+            res.status(500).json(error.toString());
         }
     },
-
-
-
 }
 
 module.exports = cardController;

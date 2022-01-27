@@ -20,12 +20,12 @@ router.get('/cards/:id', cardController.getOneCard);
 router.patch('/cards/:id', cardController.updateCard);
 router.delete('/cards/:id', cardController.deleteCard);
 
-// router.get('/tags', tagController.getAllTags);
-// router.post('/tags', tagController.createTag);
+router.get('/tags', tagController.getAllTags);
+router.post('/tags', tagController.createTag);
 
-// router.get('/tags/:id', tagController.getOneTag);
-// router.patch('/tags/:id', tagController.updateTag);
-// router.delete('/tags/:id', tagController.deleteTag);
+router.get('/tags/:id', tagController.getOneTag);
+router.patch('/tags/:id', tagController.updateTag);
+router.delete('/tags/:id', tagController.deleteTag);
 
 
 module.exports = router;

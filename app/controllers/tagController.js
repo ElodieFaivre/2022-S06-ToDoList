@@ -2,15 +2,19 @@ const { Tag } = require('../models');
 
 const tagController = {
     async getAllTags(req, res) {
-        const tagArray = await Tag.findAll({
-            include: ['cards']
-        });
-        res.json(tagArray);
+        try {
+            const tagArray = await Tag.findAll({
+                include: ['cards']
+            });
+            res.json(tagArray);
+        }
+        catch (error) {
+            res.status(500).json(error.toString());
+        }
     },
+
     async createTag(req, res) {
-        // pour créer une liste, j'ai juste besoin
-        // de lui donner un name.
-        // ce name, je vais le récupérer dans le body de la requete
+        
         try {
             if (req.body.name && req.body.color) {
                 const newTag = new Tag({
@@ -26,22 +30,27 @@ const tagController = {
                 res.status(404).json({ error: 'Nom et couleur obligatoire' })
             }
         }
-        catch (err) {
-            res.status(404).json({ error: 'Erreur dans la création ' });
+        catch (error) {
+            res.status(500).json(error.toString());
         }
 
     },
+
     async getOneTag(req, res) {
         const id = parseInt(req.params.id);
         try {
             const oneTag = await Tag.findByPk(id, {
                 include: ['cards']
             });
-            res.status(201).json(oneTag);
+            if (!oneTag) {
+                return res.status(404).json({ error: 'No tag with id ' + req.params.id });
+            }
+            res.status(200).json(oneTag);
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such tag ' });
+        catch (error) {
+            res.status(500).json(error.toString());
         }
+
     },
 
     async updateTag(req, res) {
@@ -49,34 +58,41 @@ const tagController = {
 
         try {
             const oneTag = await Tag.findByPk(id);
+            if (!oneTag) {
+                return res.status(404).json({ error: 'No tag with id ' + req.params.id });
+            }
             if (req.body.name) {
-                oneList.name = req.body.name;
+                oneTag.name = req.body.name;
             }
             if (req.body.color) {
-                oneList.color = parseInt(req.body.color);
+                oneTag.color = parseInt(req.body.color);
             }
             await oneTag.save();
             res.status(200).json(oneTag);
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such tag ' });
+        catch (error) {
+            res.status(500).json(error.toString());
         }
     },
 
     async deleteTag(req, res) {
         const id = parseInt(req.params.id);
         try {
-            const oneTag = await Tag.findByPk(id);
-            await oneTag.destroy();
-            res.status(204).send('Supprimé avec succès');
+            const tagToDelete = await Tag.findByPk(id);
+            if (!tagToDelete) {
+                res.status(404).json({ error: 'No tag with id ' + req.params.id })
+            } else {
+                await tagToDelete.destroy();
+                res.status(204).send();
+                //equivalent à res.sendStatus(204)
+            }
         }
-        catch (err) {
-            res.status(404).json({ error: 'No such tag ' });
+        catch (error) {
+            console.log(error);
+            // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
+            res.status(500).json(error.toString());
         }
     },
-
-
-
 }
 
 module.exports = tagController;
