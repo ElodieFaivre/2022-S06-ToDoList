@@ -50,20 +50,3 @@ const mainController = {
 }
 
 module.exports= mainController;
-
-// const cardId = 16;
-// const cardToLink = await Card.findByPk(cardId);
-
-// const tagId = parseInt(1);
-// const oneTag = await Tag.findByPk(tagId);
-
-// await cardToLink.addTag(oneTag, { through: { name: "ToDO" } });
-
-// const result = await Card.findOne({
-//   where: { id: 16 },
-//   include: "tags",
-// });
-
-// console.log(cardToLink);
-// console.log(oneTag);
-// console.log(result);
