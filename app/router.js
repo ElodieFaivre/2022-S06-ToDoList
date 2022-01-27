@@ -3,6 +3,7 @@ const express = require('express');
 const listController = require('./controllers/listController');
 const cardController = require('./controllers/cardController');
 const tagController = require('./controllers/tagController');
+const mainController = require('./controllers/mainController');
 
 const router = express.Router();
 
@@ -26,6 +27,9 @@ router.post('/tags', tagController.createTag);
 router.get('/tags/:id', tagController.getOneTag);
 router.patch('/tags/:id', tagController.updateTag);
 router.delete('/tags/:id', tagController.deleteTag);
+
+router.post('/cards/:id/tags', mainController.linkTagToCard);
+router.delete('/cards/:cardId/tags/:tagId', mainController.removeTagToCard)
 
 
 module.exports = router;
