@@ -16,7 +16,7 @@ const listController = {
             res.json(listArray);
         }
         catch (error) {
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
 
     },
@@ -44,7 +44,7 @@ const listController = {
 
         }
         catch (error) {
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
 
         }
 
@@ -71,7 +71,7 @@ const listController = {
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
 
@@ -99,7 +99,7 @@ const listController = {
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
 
@@ -118,7 +118,7 @@ const listController = {
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
 }

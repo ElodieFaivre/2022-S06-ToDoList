@@ -22,7 +22,7 @@ const mainController = {
 
         }
         catch (error) {
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
 
@@ -43,7 +43,7 @@ const mainController = {
 
         }
         catch (error) {
-            res.status(500).json(error.toString());
+            res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
 
