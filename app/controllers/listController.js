@@ -39,7 +39,7 @@ const listController = {
                 res.status(201).json(newList);
             }
             else {
-                res.status(404).json({ error: 'Nom obligatoire' })
+                res.status(400).json({ error: 'Nom obligatoire' })
             }
 
         }
@@ -121,6 +121,23 @@ const listController = {
             res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
+
+    createOrUpdate: async (req, res) => {
+        try {
+          let list;
+          if (req.params.id) {
+            list = await List.findByPk(req.params.id);
+          }
+          if (list) {
+            await listController.updateList(req, res);
+          } else {
+            await listController.createList(req, res);
+          }
+        } catch (error) {
+          console.trace(error);
+          res.status(500).json(error.toString());
+        }
+      },
 }
 
 module.exports = listController;

@@ -1,16 +1,24 @@
 const { Card } = require('../models');
 
 const cardController = {
-    async getAllCards(req, res) {
+    async getAllCardsInList(req, res) {
         try {
+            const listId = parseInt(req.params.id);
             const cardArray = await Card.findAll({
+                where: {
+                    list_id: listId
+                },
                 include: [
                     {
                         association: 'tags',
                     }
                 ]
             });
-            res.status(200).json(cardArray);
+            if (!cardArray) {
+                res.status(404).json('Cant find cards with list_id ' + listId);
+            } else {
+                res.status(200).json(cardArray);
+            }
         }
         catch (error) {
             res.status(500).json(error.toString());
@@ -31,11 +39,11 @@ const cardController = {
                 res.status(201).json(newCard);
             }
             else {
-                res.status(404).json({ error: 'Nom, couleur et liste obligatoire' })
+                res.status(400).json({ error: 'Nom, couleur et liste obligatoire' })
             }
         }
         catch (error) {
-            res.status(500).json({message: 'Une erreur est survenue'});
+            res.status(500).json({ message: 'Une erreur est survenue' });
         }
     },
 
@@ -53,14 +61,16 @@ const cardController = {
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json({message: 'Une erreur est survenue'});
+            res.status(500).json({ message: 'Une erreur est survenue' });
         }
     },
 
     async updateCard(req, res) {
         const id = parseInt(req.params.id);
         try {
-            const oneCard = await Card.findByPk(id);
+            const oneCard = await Card.findByPk(id, {
+                include : ['tags']
+            });
             if (!oneCard) {
                 return res.status(404).json({ error: 'No card with id ' + req.params.id });
             }
@@ -73,13 +83,16 @@ const cardController = {
             if (req.body.color) {
                 oneCard.color = req.body.color;
             }
+            if (req.body.list_id) {
+                oneCard.list_id = req.body.list_id;
+            }
             await oneCard.save();
             res.status(200).json(oneCard);
         }
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json({message: 'Une erreur est survenue'});
+            res.status(500).json({ message: 'Une erreur est survenue' });
         }
     },
 
@@ -98,9 +111,26 @@ const cardController = {
         catch (error) {
             console.log(error);
             // je renvoie un code 500 (= erreur serveur) et dans le json, je redonne l'erreur
-            res.status(500).json({message: 'Une erreur est survenue'});
+            res.status(500).json({ message: 'Une erreur est survenue' });
         }
     },
+
+    createOrUpdate: async (req, res) => {
+        try {
+          let card;
+          if (req.params.id) {
+            card = await Card.findByPk(req.params.id);
+          }
+          if (card) {
+            await cardController.updateCard(req, res);
+          } else {
+            await cardController.createCard(req, res);
+          }
+        } catch (error) {
+          console.trace(error);
+          res.status(500).send(error);
+        }
+      },
 }
 
 module.exports = cardController;

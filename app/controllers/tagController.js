@@ -27,7 +27,7 @@ const tagController = {
                 res.status(201).json(newTag);
             }
             else {
-                res.status(404).json({ error: 'Nom et couleur obligatoire' })
+                res.status(400).json({ error: 'Nom et couleur obligatoire' })
             }
         }
         catch (error) {
@@ -93,6 +93,23 @@ const tagController = {
             res.status(500).json({message: 'Une erreur est survenue'});
         }
     },
+
+    createOrUpdate: async (req, res) => {
+        try {
+          let tag;
+          if (req.params.id) {
+            tag = await Tag.findByPk(req.params.id);
+          }
+          if (tag) {
+            await tagController.UpdateTag(req, res);
+          } else {
+            await tagController.createTag(req, res);
+          }
+        } catch (error) {
+          console.trace(error);
+          res.status(500).send(error);
+        }
+      },
 }
 
 module.exports = tagController;

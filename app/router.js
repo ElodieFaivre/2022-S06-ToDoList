@@ -14,11 +14,11 @@ router.get('/lists/:id', listController.getOneList);
 router.patch('/lists/:id', listController.updateList);
 router.delete('/lists/:id', listController.deleteList);
 
-router.get('/cards', cardController.getAllCards);
+router.get('/lists/:id/cards', cardController.getAllCardsInList);
 router.post('/cards', cardController.createCard);
-
 router.get('/cards/:id', cardController.getOneCard);
 router.patch('/cards/:id', cardController.updateCard);
+router.put('/cards/:id?', cardController.createOrUpdate);
 router.delete('/cards/:id', cardController.deleteCard);
 
 router.get('/tags', tagController.getAllTags);

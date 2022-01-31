@@ -9,7 +9,7 @@ const mainController = {
             const cardId = parseInt(req.params.id);
 
             const tagToLink = await Tag.findByPk(tagId);
-            const cardToLink = await Card.findByPk(cardId, {
+            let cardToLink = await Card.findByPk(cardId, {
                 include : ['tags']
             });
 
@@ -18,6 +18,9 @@ const mainController = {
             }
 
             await cardToLink.addTag(tagToLink);
+            cardTolink = await Card.findByPk(cardId, {
+                include: ['tags']
+              });
             res.status(200).json(cardToLink);
 
         }
@@ -32,13 +35,16 @@ const mainController = {
             const cardId = parseInt(req.params.cardId);
 
             const tagToLink = await Tag.findByPk(tagId);
-            const cardToLink = await Card.findByPk(cardId);
+            let cardToLink = await Card.findByPk(cardId);
 
             if(!tagToLink || !cardToLink){
                 return res.status(404).json({ error: 'No card or tag found with id'});
             }
 
             await cardToLink.removeTag(tagToLink);
+            cardToLink = await Card.findByPk(cardId, {
+                include: ['tags']
+              });
             res.status(204).send();
 
         }
