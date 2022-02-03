@@ -40,7 +40,7 @@ const tagController = {
         const id = parseInt(req.params.id);
         try {
             const oneTag = await Tag.findByPk(id, {
-                include: ['cards']
+                include: ['cardList']
             });
             if (!oneTag) {
                 return res.status(404).json({ error: 'No tag with id ' + req.params.id });

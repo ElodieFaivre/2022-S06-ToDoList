@@ -5,6 +5,7 @@ const mainController = {
 
     async linkTagToCard (req, res) {
         try {
+            console.log('TAG associate', req.body);
             const tagId = parseInt(req.body.id);
             const cardId = parseInt(req.params.id);
 
@@ -18,6 +19,7 @@ const mainController = {
             }
 
             await cardToLink.addTag(tagToLink);
+            
             cardTolink = await Card.findByPk(cardId, {
                 include: ['tags']
               });
