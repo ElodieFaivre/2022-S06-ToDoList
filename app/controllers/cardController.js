@@ -12,7 +12,12 @@ const cardController = {
                     {
                         association: 'tags',
                     }
+                ],
+                order:[
+                    ['position','ASC'],
+                    ['position','DESC']
                 ]
+                  
             });
             if (!cardArray) {
                 res.status(404).json('Cant find cards with list_id ' + listId);
@@ -71,6 +76,7 @@ const cardController = {
     async updateCard(req, res) {
         const id = parseInt(req.params.id);
         try {
+            console.log(req.body);
             const oneCard = await Card.findByPk(id, {
                 include : ['tags']
             });
