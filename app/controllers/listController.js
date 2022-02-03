@@ -23,6 +23,8 @@ const listController = {
 
     async createList(req, res) {
         try {
+            console.log('Form recu :' ,req.body);
+            console.log('Form recu name :', req.body.name);
             if (req.body.name) {
                 const newList = new List({
                     name: req.body.name
@@ -31,7 +33,7 @@ const listController = {
                 if (req.body.position) {
                     newList.position = req.body.position
                 }
-
+                console.log(newList);
                 await newList.save();
 
                 // je renvoie l'instance agrémentée de son id

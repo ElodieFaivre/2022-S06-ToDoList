@@ -27,19 +27,22 @@ const cardController = {
 
     async createCard(req, res) {
         try {
-            if (req.body.content && req.body.color && req.body.list_id) {
+            console.log(req.body);
+            if (req.body.content  && req.body.list_id) {
                 const newCard = new Card({
                     content: req.body.content,
-                    color: req.body.color,
                     list_id: req.body.list_id
                 });
-
+                if(req.body.color){
+                    newCard.color=req.body.color;
+                }
+            
                 await newCard.save();
-
+                
                 res.status(201).json(newCard);
             }
             else {
-                res.status(400).json({ error: 'Nom, couleur et liste obligatoire' })
+                res.status(400).json({ error: 'Nom et liste obligatoire' })
             }
         }
         catch (error) {

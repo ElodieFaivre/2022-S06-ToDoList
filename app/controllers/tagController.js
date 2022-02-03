@@ -4,7 +4,7 @@ const tagController = {
     async getAllTags(req, res) {
         try {
             const tagArray = await Tag.findAll({
-                include: ['cards']
+                include: ['cardList']
             });
             res.json(tagArray);
         }
