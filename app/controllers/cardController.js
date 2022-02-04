@@ -15,7 +15,7 @@ const cardController = {
                 ],
                 order:[
                     ['position','ASC'],
-                    ['position','DESC']
+                    ['content','ASC'],
                 ]
                   
             });
