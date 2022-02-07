@@ -17,12 +17,13 @@ const mainController = {
             if(!tagToLink || !cardToLink){
                 return res.status(404).json({ error: 'No card or tag found with id'});
             }
-
+            
             await cardToLink.addTag(tagToLink);
             
-            cardTolink = await Card.findByPk(cardId, {
+            cardToLink = await Card.findByPk(cardId, {
                 include: ['tags']
               });
+            console.log(cardToLink);  
             res.status(200).json(cardToLink);
 
         }
