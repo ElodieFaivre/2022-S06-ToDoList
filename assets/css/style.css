@@ -1,0 +1,32 @@
+:root{
+  --color1: #122c48;
+--color2 : #175da6;
+--color3 : #e48818;
+--color4 : #eaca4a;
+--color5: #f2e98a;
+}
+
+body {
+  background-color: #ccc;
+  /* height: 100vh; */
+}
+
+.card-lists {
+  overflow-x: auto;
+}
+
+.color_field {
+  width:2rem;
+}
+
+.list-delete-btn{
+  padding:0.75rem;
+}
+
+.has-background-primary{
+  background-color: var(--color1)!important;
+}
+
+.is-success{
+  background-color: var(--color2)!important;
+}

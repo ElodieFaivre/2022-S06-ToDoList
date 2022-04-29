@@ -31,5 +31,4 @@ router.delete('/tags/:id', tagController.deleteTag);
 router.post('/cards/:id/tags', mainController.linkTagToCard);
 router.delete('/cards/:cardId/tags/:tagId', mainController.removeTagToCard)
 
-
 module.exports = router;

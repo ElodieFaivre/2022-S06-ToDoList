@@ -22,6 +22,8 @@ app.use(express.urlencoded({extended: true}));
 // on utlise .none() pour dire qu'on attends pas de fichier, uniquement des inputs "classiques" !
 app.use( bodyParser.none() );
 
+app.use(express.static('./assets'));
+
 app.use(router);
 
 app.listen(port, _ => {
